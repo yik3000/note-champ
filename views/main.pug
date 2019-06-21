@@ -1,0 +1,25 @@
+extends layout
+
+block style
+	style.
+		.query-panel
+		{
+			text-align:center;		
+		}
+block content
+	link(rel='stylesheet', href='/css/user.css')
+	.query-panel
+		h3 搜索內容
+		form.form-horizontal(method="POST")
+			input(type='hidden', name='_csrf', value=_csrf)
+			.row
+				.form-group
+					.col-xs-offset-3.col-xs-6
+						input.form-control(type="text",name="question",id="question",placeholder="問題", autofocus)
+				.form-group
+					.row.col-xs-offset-4
+						button.col-sm-3.btn.btn-primary(type="submit", style="margin-right:5px")
+							i.fa.fa-user 
+							| 搜索
+						a.col-sm-3.btn.btn-success(href="page/new", style="margin-left:5px")
+							| 增加

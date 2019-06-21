@@ -1,0 +1,30 @@
+extends ../../layout
+block style
+	style.
+		.source{
+
+		}
+
+mixin sourceThumbnail(source)
+	div.col-sm-3.source 
+		a(href="./sources/pages/" + source._id.id)
+			div= '源名 ' +	 source._id.title
+		div= '一共有 ' + source.count + ' 頁資料'
+		div= '最後更新時間 ' + source.latest
+
+block content
+	h3 所有源名稱
+	div.container-fluid
+		.row
+			form.form-horizontal(id="usrform", method="GET", action="io")
+				input(type='hidden', name='_csrf', value=_csrf)
+				input(type="submit" value="Export")
+		.row
+			form(method="POST" action="io" enctype="multipart/form-data")
+				strong| Upload
+				input(type='hidden', name='_csrf', value=_csrf)
+				input(type="file",name="recfile")
+				input(type="submit" value="Import")
+		.row
+			for source in results 
+				+sourceThumbnail(source)

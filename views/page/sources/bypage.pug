@@ -1,0 +1,24 @@
+extends ../../layout
+block style
+	style.
+		.preview img
+		{
+		 	width:100%;
+		}
+		.page{
+			margin-bottom:30px;
+		}
+
+mixin pageThumbnail(page)
+	.col-xs-6.col-sm-4.col-md-3.page
+		div.col-sm-6.col-xs-12.preview 
+			a(href="../../page/edit/" + page._id)
+				img(src=page.thumbnail)
+		div.col-sm-6.col-xs-12
+			h4= page.source.name
+
+block content
+	div.container-fluid
+		.row
+			for page in results 
+				+pageThumbnail(page)

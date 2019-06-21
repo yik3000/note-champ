@@ -1,0 +1,97 @@
+extends ../../layout
+block style
+	style.
+		.dz-details,.dz-success-mark,.dz-error-mark
+		{
+			display:none;
+		}
+		.control-bar
+		{
+			width:100%;
+			text-align:center;
+		}
+		.dropzone-container
+		{
+			/*width:100%; */
+			min-height:200px;
+			border: 1px dotted silver;
+		}
+		.dropzone-previews
+		{
+
+		}
+		.after-upload
+		{
+			display:none;		
+		}
+		.before-upload
+		{
+
+		}
+		.center {
+		    margin: auto;
+		    width: 50%;
+		    padding: 10px;
+		}
+	link(rel='stylesheet', href='/css/user.css')
+block content
+	.row
+		.col-sm-offset-2.col-sm-8
+			.dropzone-container
+				.dropzone-previews.center
+	.row
+		.col-sm-12(style="text-align:center")
+			select(id="lang_selector")
+				option(value="chi_tra", selected=true) 繁体中文
+				option(value="chi_sim") 简体中文
+				option(value="eng") 英文
+	.row
+		.col-sm-12
+			.control-bar.before-upload
+				div.btn.btn-primary(id="confirm") 確定
+			.control-bar.after-upload
+				a.btn.btn-primary(href="./all") 我的筆記
+				a.btn.btn-primary(href="./new") 第二頁
+
+block script
+	script(src="/js/lib/dropzone.js")
+	script.
+		Dropzone.autoDiscover = false;
+		var myDropzone = new Dropzone(document.body, {
+			url:'../image',
+			paramName:'recfile',
+			acceptedFiles: 'image/*',
+			uploadMultiple: false,
+			autoProcessQueue: false,
+			dictDefaultMessage: "拖入要上傳圖像或點擊",
+			previewsContainer: ".dropzone-previews",
+			maxFiles: 1,
+			init: function() {
+		      this.on("maxfilesexceeded", function(file) {
+		            this.removeAllFiles();
+		            this.addFile(file);
+		      });
+		      this.on('sending', function(file, xhr, formData){
+		      	var val = $('#lang_selector').val();
+		      	formData.append('lang', val);
+		      })
+		      this.on('uploadprogress', function(file,progress, bytesSent){
+		      	//console.log(bytesSent);
+		      })
+		      this.on('totaluploadprogress', function(progress, totalBytesSent){
+		      		//console.log(progress);
+		      })
+		      this.on('complete',function(file, token){
+
+			      	window.location.href = "./latest";
+
+		      		//$(".after-upload").css("display","block");
+		      		//$(".before-upload").css("display","none");
+		      })
+			}   
+		});
+
+		$("#confirm").on("click", function(evt){
+			myDropzone.processQueue();
+
+		})

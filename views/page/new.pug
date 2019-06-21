@@ -1,0 +1,35 @@
+extends ../layout
+block content
+	link(rel='stylesheet', href='/css/user.css')
+	h3 加入新一頁
+	div 在此頁貼上掃描書籍
+	
+	//.col-sm-offset-1
+	.col-sm-11
+		.col-sm-6
+			row
+				.col-sm-12
+					//.pasty
+					.dropzone 投放內容
+			row
+			//	.col-sm-12
+			//		form.form-horizontal(method="POST", action="../image")
+			//			input(type='hidden', name='_csrf', value=_csrf)
+			//			input(type="hidden", name="image" id="image")
+			//			input.btn.btn-primary(type="submit", value="上傳")
+		.col-sm-6
+			form.form-horizontal(method="POST")
+				input(type='hidden', name='_csrf', value=_csrf)
+				.form-group
+					label.control-label(for='content') 搜索內容				
+					input.form-control(type="text-area",name="content",id="content",placeholder="搜索內容", autofocus)
+				
+block script
+	//script(src='/js/lib/page-image.js')
+	script(src="/js/lib/dropzone.js")
+	script.
+		$('div.dropzone').dropzone({
+			url:'../image',
+			paramName:'recfile',
+			uploadMultiple: false,
+		})

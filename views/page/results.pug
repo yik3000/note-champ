@@ -1,0 +1,73 @@
+extends ../layout
+block style
+	style.
+		.page-item
+		{
+			padding-left:5px;
+			padding-right:5px;
+			padding-bottom: 15px;	
+			padding-top:15px;	
+		}
+		.page-item:nth-child(2n+1){
+			border:1px dotted silver;
+			height:100%;
+		}
+		.page-item:nth-child(2n){
+			background-color:silver;
+			border:1px dotted black;
+		}
+		.page-item .title
+		{
+			font-style:italic;
+		}
+		.thumbnail img
+		{
+		 	width:100%;
+		}
+		.highlight
+		{
+			padding-top:15px;
+			font-size: 1em		
+		}
+		.highlight em
+		{
+			font-weight:bold;
+			font-size: 1.5em;
+			font-style: normal;
+			background-color: yellow;		
+			padding-left: 6px;
+			padding-right:6px;
+		}
+mixin searchHit(page)
+	div.page-item.row
+		.col-sm-offset-0.col-sm-3.col-md-offset-1.col-md-4.thumbnail
+			a(href="./edit/" + page._id)
+				img(src=page.thumbnail)
+		.col-sm-8.col-md-7.info
+			div
+				h4.title= page.source != null ? page.source.name : ''
+			div
+				.label.label-primary= '錄入時間: ' + page.timeStamp
+			div
+				if page.finishedOcr
+					.label.label-success 完成OCR
+				else
+					.label.label-danger 未完成OCR					
+			div
+				div.highlight
+					if page.language == 'chi_tra' || page.language == "chi_sim"
+						if page.hit.highlight != null
+							for highlight in page.hit.highlight.asianContent
+								div !{highlight}
+					else if page.language == "eng"
+						if page.hit.highlight != null
+							for highlight in page.hit.highlight.engContent
+								div !{highlight}				
+
+block content
+	h2 搜索結果
+	div.container-fluid
+		for page in searchResult 
+			+searchHit(page)
+block script
+	

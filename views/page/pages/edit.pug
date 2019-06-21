@@ -1,0 +1,79 @@
+extends ../../layout
+block style
+	style.
+		img {
+		  display: block;
+		  width: 100%;
+		  height: auto;
+		}
+		div[contenteditable]
+		{
+			 min-height: 100px; /* it should resize as required from this minimum height */
+			padding: 10px; outline: 1px dashed #CCC; 
+
+			font-family:arial;
+			font-size: 1em;
+
+			max-height: 300px;
+			overflow:scroll;
+		}
+		div[contenteditable]:hover 
+		{ 
+			outline: 1px dashed #0090D2; 
+		}
+	
+
+block content
+	link(rel='stylesheet', href='/css/user.css')
+	h3 剪裁內容
+	.row
+		.col-xs-12.col-sm-8
+				img(src= "../../images/" + page.imagePath)
+		.col-xs-12.col-sm-4
+			form.form-horizontal(id="usrform", method="POST",onsubmit="return getContent()")
+				.container-fluid
+					input(type='hidden', name='_csrf', value=_csrf)
+					textarea(id="content",name="content",style="display:none")
+					textarea(id="memo",name="memo",style="display:none")
+					.form-group
+						label.control-label(for='title') 源名			
+						input.form-control(type="text",name="title",id="title",placeholder="源名", value= page.source != null ? page.source.name : '')
+					.form-group
+						label.control-label(for='pageInfo') 頁記錄			
+						input.form-control(type="text",name="pageInfo",id="pageInfo",placeholder="頁記錄", value= page.pageInfo)
+					.form-group
+						label.control-label(for='content') 搜索內容
+						div(id="content-editor", contenteditable=true) !{page.displayContent}
+						//if page.language == 'chi_sim' || page.language == "chi_tra"				
+							div(id="content-editor", contenteditable=true) !{page.content.asianContent}
+						//else if page.language == "eng"
+							div(id="content-editor", contenteditable=true) !{page.content.engContent}
+					.form-group
+						label.control-label(for='memo') 自我筆記				
+						div(id="memo-editor", contenteditable=true) !{page.memo}
+					.form-group
+						input.btn.btn-primary.form-control(type="submit", value="更改") 
+					.form-group
+						input(type="hidden", id="delete", name="delete", value="false")
+						div.form-control.btn.btn-danger(id="btn-delete") 刪除
+block script
+	script.
+		function getContent(){
+		      //document.getElementById("content").value = document.getElementById("content-editor").innerHTML;
+				var content = document.getElementById("content-editor").innerHTML;
+				//content = content.html()
+				document.getElementById("content").value = content;
+
+			    document.getElementById("memo").value = document.getElementById("memo-editor").innerHTML;
+		}
+		$(function(){
+			$("#btn-delete").on("click",function(evt){
+				$("#delete").val("true");
+				$("#usrform").submit();
+
+				//var content = document.getElementById("content-editor").innerHTML;
+				//content = content.html()
+				//console.log(escape(content));
+
+			})
+		})

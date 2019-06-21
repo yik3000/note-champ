@@ -1,0 +1,39 @@
+extends ../../layout
+block style
+	style.
+		.page-item
+		{
+			min-height:200px;
+		}
+		.thumbnail
+		{
+			width:100%;
+		}
+		.content 
+		{
+			overflow:hidden;
+			max-height:300px;
+		}
+mixin pageThumbnail(page)
+	div.page-item.col-md-3.col-sm-4.col-xs-6
+		div
+			a(href="./edit/" + page._id)
+				img.thumbnail(src=page.thumbnail)
+		div
+			span.title= page.source != null ? page.source.name : ''
+		div
+			if page.finishedOcr
+				.label.label-success 完成OCR
+			else
+				.label.label-danger 未完成OCR					
+
+
+block content
+	h3 我的讀書筆記
+
+	div.container-fluid
+		.row
+			for page in pages 
+				+pageThumbnail(page)
+block script
+	
